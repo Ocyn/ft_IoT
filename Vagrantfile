@@ -1,4 +1,5 @@
 K3S_TOKEN = "shlong"
+#  TODO change to 192.158.56.XX
 SERVER_IP = "192.168.57.110"
 SERVER_WORKER_IP = "192.168.57.111"
 
@@ -20,14 +21,19 @@ Vagrant.configure(2) do |config|
 	config.vm.define "jcuzinS" do |control|
 		control.vm.hostname = "jcuzinS"
 		control.vm.network "private_network",
-		#  TODO change to 192.158.56.110
+		
 		 ip: SERVER_IP
 		control.vm.provider "libvirt" do |v|
 			v.cpus = 1
 			v.memory = 1024
 		end
-		control.vm.provision "shell",
-		path: "./utils/S_setup_server.sh", args: [K3S_TOKEN]
+		# control.vm.provision "shell",
+		# path: "./utils/S_setup_server.sh", 
+		# args: [SERVER_IP, K3S_TOKEN]
+		control.vm.provision "shell" do |s|
+			s.path = "./utils/S_setup_server.sh"
+			s.args = [SERVER_IP, K3S_TOKEN]
+		end
 
 	end
 
@@ -40,8 +46,13 @@ Vagrant.configure(2) do |config|
 			v.cpus = 2
 			v.memory = 2048 
 		end
-		control.vm.provision "shell",
-		path: "./utils/SW_setup_agent.sh", args: [SERVER_IP, K3S_TOKEN]
+		# control.vm.provision "shell",
+		# path: "./utils/SW_setup_agent.sh"
+		# args: [SERVER_IP, K3S_TOKEN]
+		control.vm.provision "shell" do |s|
+			s.path = "./utils/SW_setup_agent.sh"
+			s.args = [SERVER_IP, K3S_TOKEN]
+		end
 	end
 
 end
