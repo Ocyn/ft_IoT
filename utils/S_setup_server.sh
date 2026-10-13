@@ -3,6 +3,7 @@ set -e
 SERVER_IP=$1
 TOKEN=$2
 
+echo ">>> ARGS reçus : SERVER_IP='$1' TOKEN='$2'"
 
 # export TOKEN=$(cat K3S_TOKEN)
 
