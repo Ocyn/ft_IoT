@@ -1,15 +1,24 @@
-K3S_TOKEN = "test"
+# VARIABLES
+
+
+VM_DISTRO = "debian/trixie64"
+VM_VERSION = "13.20260519.1"
+
 #  TODO change to 192.158.56.XX
 SERVER_IP = "192.168.57.110"
-SERVER_WORKER_IP = "192.168.57.111"
+SERVER_NAME = "jcuzinS"
+
+WORKER_IP = "192.168.57.111"
+WORKER_NAME = "jcuzinSW"
+K3S_TOKEN = "test"
+
+
 
 
 Vagrant.configure(2) do |config|
 
-	config.vm.box = "debian/trixie64"
-	config.vm.box_version = "13.20260519.1"
-	# config.vm.provider "libvirt" do |v|
-	# end
+	config.vm.box = VM_DISTRO
+	config.vm.box_version = VM_VERSION
 
 	config.vm.provision "file",
 		source: "~/.ssh/id_ed25519.pub",
@@ -18,18 +27,14 @@ Vagrant.configure(2) do |config|
 	config.vm.provision "shell",
 		path: "./utils/global_setup.sh"
 
-	config.vm.define "jcuzinS" do |control|
-		control.vm.hostname = "jcuzinS"
+	config.vm.define SERVER_NAME do |control|
+		control.vm.hostname = SERVER_NAME
 		control.vm.network "private_network",
-		
 		 ip: SERVER_IP
 		control.vm.provider "libvirt" do |v|
 			v.cpus = 1
 			v.memory = 1024
 		end
-		# control.vm.provision "shell",
-		# path: "./utils/S_setup_server.sh", 
-		# args: [SERVER_IP, K3S_TOKEN]
 		control.vm.provision "shell" do |s|
 			s.path = "./utils/S_setup_server.sh"
 			s.args = [SERVER_IP, K3S_TOKEN]
@@ -37,21 +42,17 @@ Vagrant.configure(2) do |config|
 
 	end
 
-	config.vm.define "jcuzinSW" do |control|
-		control.vm.hostname = "jcuzinSW"
+	config.vm.define WORKER_NAME do |control|
+		control.vm.hostname = WORKER_NAME
 		control.vm.network "private_network",
-		#  TODO change to 192.158.56.111
-		 ip: SERVER_WORKER_IP
+		 ip: WORKER_IP
 		control.vm.provider "libvirt" do |v|
 			v.cpus = 2
-			v.memory = 2048 
+			v.memory = 2048
 		end
-		# control.vm.provision "shell",
-		# path: "./utils/SW_setup_agent.sh"
-		# args: [SERVER_IP, K3S_TOKEN]
 		control.vm.provision "shell" do |s|
 			s.path = "./utils/SW_setup_agent.sh"
-			s.args = [SERVER_IP, K3S_TOKEN]
+			s.args = [SERVER_IP, K3S_TOKEN, WORKER_IP]
 		end
 	end
 
