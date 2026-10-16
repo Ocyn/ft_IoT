@@ -3,7 +3,7 @@ set -e
 SERVER_IP=$1
 TOKEN=$2
 
-echo ">>> ARGS reçus : SERVER_IP='$1' TOKEN='$2'"
+echo ">>> ARGS reçus : SERVER_IP='${SERVER_IP}' TOKEN='${TOKEN}'"
 
 # export TOKEN=$(cat K3S_TOKEN)
 
@@ -13,8 +13,8 @@ curl -sfL https://get.k3s.io | sh -s - server \
 	--bind-address="${SERVER_IP}" \
 	--advertise-address="${SERVER_IP}"
 
-until curl -skf "https://${SERVER_IP}:6443/ping" >/dev/null 2>&1; do
-  sleep 2
+until sudo kubectl get node jcuzinSW >/dev/null 2>&1; do
+  sleep 4
 done
 
 # sudo kubectl get nodes -o wide
