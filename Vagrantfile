@@ -1,4 +1,4 @@
-K3S_TOKEN = "shlong"
+K3S_TOKEN = "test"
 #  TODO change to 192.158.56.XX
 SERVER_IP = "192.168.57.110"
 SERVER_WORKER_IP = "192.168.57.111"
