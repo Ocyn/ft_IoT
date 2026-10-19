@@ -1,0 +1,68 @@
+
+
+
+NAME                                          READY   STATUS      RESTARTS       AGE
+pod/coredns-7cfb7bc9c7-6tjxw                  1/1     Running     0              2m19s
+pod/helm-install-traefik-5drll                0/1     Completed   2 (110s ago)   2m19s
+pod/helm-install-traefik-crd-kmhzt            0/1     Completed   0              2m19s
+pod/local-path-provisioner-77b9867795-x6j52   1/1     Running     0              2m19s
+pod/metrics-server-6dc596dfb8-bfddx           1/1     Running     0              2m19s
+pod/svclb-traefik-4b55bc58-2crww              2/2     Running     0              98s
+pod/traefik-7c8544f77-f8wqm                   1/1     Running     0              98s
+
+# Remplacer par les 3 Web Apps (dont 3 repliquants de l'app 2):
+pod/app-one
+pod/app-two-1
+pod/app-two-2
+pod/app-two-3
+pod/app-three
+
+
+
+NAME                     TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                      AGE
+service/kube-dns         ClusterIP      10.43.0.10      <none>           53/UDP,53/TCP,9153/TCP       2m22s
+service/metrics-server   ClusterIP      10.43.231.200   <none>           443/TCP                      2m22s
+service/traefik          LoadBalancer   10.43.239.168   192.168.57.110   80:31878/TCP,443:30494/TCP   98s
+
+# Setup kube et les 3 apps
+service/kubernetes
+service/app-one
+service/app-two
+service/app-three
+
+
+NAME                                    DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/svclb-traefik-4b55bc58   1         1         1       1            1           <none>          98s
+# Pas de deamon
+
+
+
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/coredns                  1/1     1            1           2m22s
+deployment.apps/local-path-provisioner   1/1     1            1           2m22s
+deployment.apps/metrics-server           1/1     1            1           2m22s
+deployment.apps/traefik                  1/1     1            1           98s
+
+# 3 apps
+deployment.apps/app-one
+deployment.apps/app-two
+deployment.apps/app-three
+
+
+NAME                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/coredns-7cfb7bc9c7                  1         1         1       2m20s
+replicaset.apps/local-path-provisioner-77b9867795   1         1         1       2m20s
+replicaset.apps/metrics-server-6dc596dfb8           1         1         1       2m20s
+replicaset.apps/traefik-7c8544f77                   1         1         1       98s
+
+# 3 replicas pour les 3 apps
+replicaset.apps/app-one
+replicaset.apps/app-two
+replicaset.apps/app-three
+
+
+NAME                                 STATUS     COMPLETIONS   DURATION   AGE
+job.batch/helm-install-traefik       Complete   1/1           44s        2m21s
+job.batch/helm-install-traefik-crd   Complete   1/1           31s        2m21s
+
+# pas de job
