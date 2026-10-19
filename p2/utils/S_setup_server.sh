@@ -25,8 +25,11 @@ done
 # Check k3s running status
 sudo systemctl status k3s --no-pager
 
+# Pour que kubectl ne necessite pas sudo
+sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+
 # Add master role to server
-sudo kubectl label node "${SERVER_NAME}" node-role.kubernetes.io/master=master --overwrite
+kubectl label node "${SERVER_NAME}" node-role.kubernetes.io/master=master --overwrite
 
 # Check if Server and Worker node are linked
-sudo kubectl get nodes -o wide
+kubectl get nodes -o wide
