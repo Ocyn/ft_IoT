@@ -2,6 +2,6 @@
 42 School Inception-of-Things project about k3s and apps deployment setup
 
 # Useful commands
-sudo kubectl get node -o wide
+kubectl get node -o wide
 
-sudo kubectl get all -n kube-system
+kubectl get all -n kube-system
