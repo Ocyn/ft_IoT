@@ -1,0 +1,97 @@
+
+# IOT PART 1 VAGRANTFILE
+
+
+# VARIABLES
+
+
+VM_DISTRO = "debian/trixie64"
+VM_VERSION = "13.20260519.1"
+
+#  TODO change to 192.158.56.XX
+SERVER_IP = "192.168.57.110"
+SERVER_NAME = "jcuzinS"
+
+WORKER_IP = "192.168.57.111"
+WORKER_NAME = "jcuzinSW"
+K3S_TOKEN = "test"
+
+
+
+
+Vagrant.configure(2) do |config|
+
+	config.vm.box = VM_DISTRO
+	config.vm.box_version = VM_VERSION
+
+	config.vm.provision "file",
+		source: "~/.ssh/id_ed25519.pub",
+		destination: "~/.ssh/authorized_keys"
+
+	config.vm.provision "shell",
+		path: "./utils/global_setup.sh"
+
+	config.vm.define SERVER_NAME do |control|
+		control.vm.hostname = SERVER_NAME
+		control.vm.network "private_network",
+		 ip: SERVER_IP
+		control.vm.provider "libvirt" do |v|
+			v.cpus = 1
+			v.memory = 1024
+		end
+		control.vm.provision "shell" do |s|
+			s.path = "./utils/S_setup_server.sh"
+			s.args = [SERVER_IP, K3S_TOKEN]
+		end
+
+	end
+
+	config.vm.define WORKER_NAME do |control|
+		control.vm.hostname = WORKER_NAME
+		control.vm.network "private_network",
+		 ip: WORKER_IP
+		control.vm.provider "libvirt" do |v|
+			v.cpus = 2
+			v.memory = 2048
+		end
+		control.vm.provision "shell" do |s|
+			s.path = "./utils/SW_setup_agent.sh"
+			s.args = [SERVER_IP, K3S_TOKEN, WORKER_IP]
+		end
+	end
+
+end
+
+
+
+# 42 EXEMPLE
+# Vagrant.configure(2) do |config|
+# 	[...]
+# 	config.vm.box = REDACTED
+# 	config.vm.box_url = REDACTED
+
+# 	config.vm.define "wilS" do |control|
+# 		control.vm.hostname = "wilS"
+# 		control.vm.network REDACTED, ip: "192.168.56.110"
+# 		control.vm.provider REDACTED do |v|
+# 		v.customize ["modifyvm", :id, "--name", "wilS"]
+# 		[...]
+# 	end
+# 	config.vm.provision :shell, :inline => SHELL
+# 		[...]
+# 		SHELL
+# 		control.vm.provision "shell", path: REDACTED
+# 	end
+# 	config.vm.define "wilSW" do |control|
+# 		control.vm.hostname = "wilSW"
+# 		control.vm.network REDACTED, ip: "192.168.56.111"
+# 		control.vm.provider REDACTED do |v|
+# 		v.customize ["modifyvm", :id, "--name", "wilSW"]
+# 		[...]
+# 	end
+# 	config.vm.provision "shell", inline: <<-SHELL
+# 		[..]
+# 		SHELL
+# 		control.vm.provision "shell", path: REDACTED
+# 	end
+# end
