@@ -3,8 +3,8 @@ write-kubeconfig-mode: "0644"
 
 # Désactiver les composants non nécessaires
 disable:
-  - traefik
-  - servicelb
+  # - traefik
+  # - servicelb
   - local-path-provisioner
   - coredns
   - metrics-server
