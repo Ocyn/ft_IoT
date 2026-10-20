@@ -33,3 +33,8 @@ kubectl label node "${SERVER_NAME}" node-role.kubernetes.io/master=master --over
 
 # Check if Server and Worker node are linked
 kubectl get nodes -o wide
+
+# Deploy the application
+kubectl apply -f /home/vagrant/apps/app1.yaml
+kubectl rollout status deployment/web
+kubectl get pods -o wide
