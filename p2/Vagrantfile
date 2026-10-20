@@ -35,8 +35,8 @@ Vagrant.configure(2) do |config|
 		control.vm.network "private_network",
 		 ip: SERVER_IP
 		control.vm.provider "libvirt" do |v|
-			v.cpus = 1
-			v.memory = 1024
+			v.cpus = 2
+			v.memory = 2048
 		end
 		control.vm.provision "file",
 			source: "./utils/server-config.yaml",
@@ -48,6 +48,12 @@ Vagrant.configure(2) do |config|
 		control.vm.provision "file",
 			source: "./utils/apps/app1.yaml",
 			destination: "/home/vagrant/apps/app1.yaml"
+		control.vm.provision "file",
+			source: "./utils/apps/app2.yaml",
+			destination: "/home/vagrant/apps/app2.yaml"
+		control.vm.provision "file",
+			source: "./utils/apps/app3.yaml",
+			destination: "/home/vagrant/apps/app3.yaml"
 		control.vm.provision "shell" do |s|
 			s.path = "./utils/S_setup_server.sh"
 			s.args = [SERVER_IP, K3S_TOKEN]
