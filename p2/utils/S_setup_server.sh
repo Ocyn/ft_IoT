@@ -38,3 +38,6 @@ kubectl get nodes -o wide
 kubectl apply -f /home/vagrant/apps/app1.yaml
 kubectl rollout status deployment/web
 kubectl get pods -o wide
+
+# Test the application
+curl http://app1.localhost
