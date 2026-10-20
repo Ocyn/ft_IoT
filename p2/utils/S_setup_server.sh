@@ -35,9 +35,13 @@ kubectl label node "${SERVER_NAME}" node-role.kubernetes.io/master=master --over
 kubectl get nodes -o wide
 
 # Deploy the application
-kubectl apply -f /home/vagrant/apps/app1.yaml
-kubectl rollout status deployment/web
+kubectl apply -f /home/vagrant/apps/
+kubectl rollout status deployment/app-1
+kubectl rollout status deployment/app-2
+kubectl rollout status deployment/app-3
 kubectl get pods -o wide
 
 # Test the application
 curl http://app1.localhost
+curl http://app2.localhost
+curl http://app3.localhost
