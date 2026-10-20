@@ -27,6 +27,27 @@ spec:
     app: app-name
   ports:
   - protocol: TCP
-    port: 8080
+    port: 80
     targetPort: 80 # ← aligner sur containerPort
   type: LoadBalancers
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web
+  annotations:
+    kubernetes.io/ingress.class: traefik
+
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: app1.localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
