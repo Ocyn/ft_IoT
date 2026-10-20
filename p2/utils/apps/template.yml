@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-name
+  template:
+    metadata:
+      labels:
+        app: app-name
+    spec:
+      containers:
+      - name: app-name
+        image: image
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-name
+spec:
+  selector:
+    app: app-name
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 80 # ← aligner sur containerPort
+  type: LoadBalancers
