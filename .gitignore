@@ -2,3 +2,4 @@
 */*/.env
 */.env
 .env
+p1/utils/secret/TOKEN
