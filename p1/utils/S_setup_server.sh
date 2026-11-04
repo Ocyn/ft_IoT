@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
+set -a
+source .env
+set +a
+
 SERVER_IP=$1
-TOKEN=$2
+TOKEN=$(cat /tmp/TOKEN)
 
 # Check if arg are correctly set up
 echo ">>> ARGS reçus : SERVER_IP='${SERVER_IP}' TOKEN='${TOKEN}'"

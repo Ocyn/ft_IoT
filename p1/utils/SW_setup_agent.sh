@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 SERVER_IP=$1
-TOKEN=$2
-WORKER_IP=$3
+TOKEN=$(cat /tmp/TOKEN)
+WORKER_IP=$2
 
 # Check if arg are correctly set up
 echo ">>> ARGS reçus : SERVER_IP='$1' TOKEN='$2' WORKER_IP='$3'"
