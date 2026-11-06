@@ -29,8 +29,8 @@ Vagrant.configure(2) do |config|
 		destination: "~/.ssh/authorized_keys"
 
 	config.vm.provision "file",
-		source: "./utils/secret/TOKEN",
-		destination: "/tmp/TOKEN"
+		source: "./utils/.env",
+		destination: "/tmp/.env"
 
 	config.vm.provision "shell",
 		path: "./utils/global_setup.sh"
