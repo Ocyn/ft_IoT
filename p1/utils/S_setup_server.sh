@@ -1,20 +1,22 @@
 #!/bin/bash
 set -e
+
+# Load environment variables from .env file
 set -a
-source .env
+source /tmp/.env
 set +a
 
-SERVER_IP=$1
-TOKEN=$(cat /tmp/TOKEN)
+# SERVER_IP=$1
+# TOKEN=$(cat /tmp/TOKEN)
 
 # Check if arg are correctly set up
-echo ">>> ARGS reçus : SERVER_IP='${SERVER_IP}' TOKEN='${TOKEN}'"
+echo ">>> ARGS reçus : SERVER_IP='${SERVER_IP}' TOKEN='${K3S_TOKEN}'"
 
 # [ -f /usr/local/bin/k3s-uninstall.sh ] && /usr/local/bin/k3s-uninstall.sh || true
 
 # Auto install script in server mode
 curl -sfL https://get.k3s.io | sh -s - server \
-	--token="${TOKEN}" \
+	--token="${K3S_TOKEN}" \
 	--node-ip="${SERVER_IP}" \
 	--bind-address="${SERVER_IP}" \
 	--advertise-address="${SERVER_IP}" 
