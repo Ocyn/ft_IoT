@@ -1,16 +1,22 @@
 #!/bin/bash
 set -e
-SERVER_IP=$1
-TOKEN=$2
+
+# Load environment variables from .env file
+set -a
+source /tmp/.env
+set +a
+
+# SERVER_IP=$1
+# TOKEN=$(cat /tmp/TOKEN)
 
 # Check if arg are correctly set up
-echo ">>> ARGS reçus : SERVER_IP='${SERVER_IP}' TOKEN='${TOKEN}'"
+echo ">>> ARGS reçus : SERVER_IP='${SERVER_IP}' TOKEN='${K3S_TOKEN}'"
 
 # [ -f /usr/local/bin/k3s-uninstall.sh ] && /usr/local/bin/k3s-uninstall.sh || true
 
 # Auto install script in server mode
 curl -sfL https://get.k3s.io | sh -s - server \
-	--token="${TOKEN}" \
+	--token="${K3S_TOKEN}" \
 	--node-ip="${SERVER_IP}" \
 	--bind-address="${SERVER_IP}" \
 	--advertise-address="${SERVER_IP}" 
@@ -25,7 +31,7 @@ done
 # Check k3s running status
 sudo systemctl status k3s --no-pager
 
-# Pour que kubectl ne necessite pas sudo
+# pour que kubectl ne necessite pas sudo
 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 
 # Add master role to server
@@ -33,6 +39,7 @@ kubectl label node "${SERVER_NAME}" node-role.kubernetes.io/master=master --over
 
 # Check if Server and Worker node are linked
 kubectl get nodes -o wide
+
 
 # Deploy the application
 kubectl apply -f /home/vagrant/apps/
