@@ -43,9 +43,14 @@ kubectl get nodes -o wide
 
 # Deploy the application
 kubectl apply -f /home/vagrant/apps/
-kubectl rollout status deployment/app-1
-kubectl rollout status deployment/app-2
-kubectl rollout status deployment/app-3
+kubectl -n default get svc
+
+# Wait for the application to be ready
+kubectl rollout status deployment/app-one
+kubectl rollout status deployment/app-two
+kubectl rollout status deployment/app-three
+
+# Check if the pods are running
 kubectl get pods -o wide
 
 # Test the application
