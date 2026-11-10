@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-2
+  name: app-two
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: app-2
+      app: app-two
   template:
     metadata:
       labels:
-        app: app-2
+        app: app-two
     spec:
       containers:
-      - name: app-2
+      - name: app-two
         image: ghcr.io/stefanprodan/podinfo:latest
         ports:
         - containerPort: 9898
@@ -21,20 +21,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-2
+  name: app-two
 spec:
   selector:
-    app: app-2
+    app: app-two
   ports:
   - protocol: TCP
     port: 80
     targetPort: 9898 # ← aligner sur containerPort
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-2
+  name: app-two
   annotations:
     kubernetes.io/ingress.class: traefik
 
@@ -48,6 +48,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app-2
+            name: app-two
             port:
               number: 80

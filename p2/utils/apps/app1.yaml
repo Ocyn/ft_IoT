@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-1
+  name: app-one
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-1
+      app: app-one
   template:
     metadata:
       labels:
-        app: app-1
+        app: app-one
     spec:
       containers:
-      - name: app-1
+      - name: app-one
         image: ghcr.io/corentinth/it-tools:latest
         ports:
         - containerPort: 80
@@ -21,20 +21,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-1
+  name: app-one
 spec:
   selector:
-    app: app-1
+    app: app-one
   ports:
   - protocol: TCP
     port: 80
     targetPort: 80 # ← aligner sur containerPort
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-1
+  name: app-one
   annotations:
     kubernetes.io/ingress.class: traefik
 
@@ -48,6 +48,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app-1
+            name: app-one
             port:
               number: 80

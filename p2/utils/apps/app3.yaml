@@ -1,40 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-3
+  name: app-three
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: app-3
+      app: app-three
   template:
     metadata:
       labels:
-        app: app-3
+        app: app-three
     spec:
       containers:
-      - name: app-3
+      - name: app-three
         image: ghcr.io/gethomepage/homepage:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: HOMEPAGE_ALLOWED_HOSTS
+          value: "app3.localhost"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-3
+  name: app-three
 spec:
   selector:
-    app: app-3
+    app: app-three
   ports:
   - protocol: TCP
     port: 80
     targetPort: 3000 # ← aligner sur containerPort
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-3
+  name: app-three
   annotations:
     kubernetes.io/ingress.class: traefik
 
@@ -48,6 +51,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app-3
+            name: app-three
             port:
               number: 80
