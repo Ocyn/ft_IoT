@@ -43,6 +43,8 @@ kubectl get nodes -o wide
 
 # Deploy the application
 kubectl apply -f /home/vagrant/apps/
+
+# Check if the services are created
 kubectl -n default get svc
 
 # Wait for the application to be ready
