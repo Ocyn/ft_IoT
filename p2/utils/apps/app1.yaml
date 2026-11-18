@@ -28,7 +28,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 80 # ← aligner sur containerPort
+    targetPort: 80 # aligner sur containerPort
   type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
