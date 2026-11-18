@@ -8,4 +8,4 @@ disable:
   - local-path-provisioner
   - coredns
   - metrics-server
-  - helm-controller
+  # - helm-controller

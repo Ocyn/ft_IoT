@@ -1,0 +1,41 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-one-ingress
+spec:
+  entryPoints:
+    - web 
+  routes:
+    - match: Host(`app1.localhost`)
+      kind: Rule
+      services:
+        - name: app-one
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-two-ingress
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`app2.localhost`)
+      kind: Rule
+      services:
+        - name: app-two
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app-three-ingress
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`app3.localhost`)
+      kind: Rule
+      services:
+        - name: app-three
+          port: 80

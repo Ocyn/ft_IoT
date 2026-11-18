@@ -41,8 +41,26 @@ kubectl label node "${SERVER_NAME}" node-role.kubernetes.io/master=master --over
 kubectl get nodes -o wide
 
 
-# Deploy the application
-kubectl apply -f /home/vagrant/apps/
+# Deploy the applications and the standard Kubernetes ingresses first.
+# Traefik is installed by K3s asynchronously, so the custom IngressRoute
+# resources must only be applied after its CRD is available.
+kubectl apply -f /home/vagrant/apps/app1.yaml
+kubectl apply -f /home/vagrant/apps/app2.yaml
+kubectl apply -f /home/vagrant/apps/app3.yaml
+
+until kubectl get crd ingressroutes.traefik.io >/dev/null 2>&1; do
+  echo "Waiting for the Traefik IngressRoute CRD..."
+  sleep 3
+done
+kubectl wait --for=condition=Established --timeout=300s crd/ingressroutes.traefik.io
+
+until kubectl -n kube-system get deployment traefik >/dev/null 2>&1; do
+  echo "Waiting for the Traefik deployment..."
+  sleep 3
+done
+kubectl -n kube-system wait --for=condition=available --timeout=300s deployment/traefik
+
+kubectl apply -f /home/vagrant/apps/ingress.yaml
 
 # Check if the services are created
 kubectl -n default get svc
@@ -61,9 +79,8 @@ kubectl get pods -o wide
 wait_for_url() {
 	url=$1
 	echo "wait for $url to be joinable"
-	while curl -sf --connect-timeout 2 $url > /dev/null -eq 1; do
+	while ! curl -sf --connect-timeout 2 "$url" >/dev/null; do
 		sleep 1
-		echo $?
 	done
 	echo "OK"
 	
@@ -74,7 +91,3 @@ wait_for_url() {
 wait_for_url http://app1.localhost
 wait_for_url http://app2.localhost
 wait_for_url http://app3.localhost
-
-# curl http://app1.localhost
-# curl http://app2.localhost
-# curl http://app3.localhost
