@@ -1,5 +1,5 @@
 sudo apt update
-# TODO Remove comment to le rendu final mon reuf
+# Commented only for faster VM re-creating in dev env, TODO: decomment ASAP
 # sudo apt update -y
 
 sudo apt install curl ufw htop btop fastfetch -y
