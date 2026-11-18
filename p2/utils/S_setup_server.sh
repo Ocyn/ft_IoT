@@ -55,7 +55,26 @@ kubectl rollout status deployment/app-three
 # Check if the pods are running
 kubectl get pods -o wide
 
+# # Attendre que le controller d'ingress soit réellement prêt
+# kubectl -n kube-system wait --for=condition=available --timeout=300s deployment/traefik
+
+wait_for_url() {
+	url=$1
+	echo "wait for $url to be joinable"
+	while curl -sf --connect-timeout 2 $url > /dev/null -eq 1; do
+		sleep 1
+		echo $?
+	done
+	echo "OK"
+	
+}
+
 # Test the application
-curl http://app1.localhost
-curl http://app2.localhost
-curl http://app3.localhost
+
+wait_for_url http://app1.localhost
+wait_for_url http://app2.localhost
+wait_for_url http://app3.localhost
+
+# curl http://app1.localhost
+# curl http://app2.localhost
+# curl http://app3.localhost
