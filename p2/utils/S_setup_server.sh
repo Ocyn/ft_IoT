@@ -76,18 +76,42 @@ kubectl get pods -o wide
 # # Attendre que le controller d'ingress soit réellement prêt
 # kubectl -n kube-system wait --for=condition=available --timeout=300s deployment/traefik
 
+
+loading_bar() {
+	printf '\r    '
+	printf '\r.'
+	sleep 0.15
+	printf '\r..'
+	sleep 0.15
+	printf '\r...'
+	sleep 0.15
+	printf '\r....'
+	sleep 0.15
+}
+
+
 wait_for_url() {
 	url=$1
 	echo "wait for $url to be joinable"
-	while ! curl -sf --connect-timeout 2 "$url" >/dev/null; do
-		sleep 1
+	while ! curl -sf --connect-timeout 1 "$url" >/dev/null; do
+		loading_bar
 	done
 	echo "OK"
 	
 }
 
+test_external_dns() {
+	url=$1
+	echo "Test app $url to be joinable from DNS"
+	until curl -sf --connect-timeout 1 -H "Host: $url" "http://192.168.67.110" > /dev/null; do
+		loading_bar
+	done
+}
+
 # Test the application
 
-wait_for_url http://app1.localhost
-wait_for_url http://app2.localhost
-wait_for_url http://app3.localhost
+wait_for_url http://app1.com
+wait_for_url http://app2.com
+wait_for_url http://app3.com
+
+# test_external_dns app1.com
