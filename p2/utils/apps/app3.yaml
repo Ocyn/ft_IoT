@@ -38,7 +38,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: app3.localhost
+  - host: app3.com
     http:
       paths:
       - path: /
