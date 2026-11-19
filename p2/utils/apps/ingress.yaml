@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - web 
   routes:
-    - match: Host(`app1.localhost`)
+    - match: Host(`app1.com`)
       kind: Rule
       services:
         - name: app-one
@@ -20,7 +20,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`app2.localhost`)
+    - match: Host(`app2.com`)
       kind: Rule
       services:
         - name: app-two
@@ -34,7 +34,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`app3.localhost`)
+    - match: Host(`app3.com`)
       kind: Rule
       services:
         - name: app-three
