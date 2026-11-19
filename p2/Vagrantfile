@@ -20,8 +20,6 @@ Vagrant.configure(2) do |config|
 	config.vm.box = VM_DISTRO
 	config.vm.box_version = VM_VERSION
 
-	# Activation automatique de vagrant-hostmanager if Vagrant.has\_plugin?("vagrant-hostmanager") config.hostmanager.enabled = true config.hostmanager.manage\_host = true # Met à jour /etc/hosts sur votre PC hôte config.hostmanager.manage\_guest = true # Met à jour /etc/hosts dans la VM end
-
 	config.vm.provision "file",
 		source: "~/.ssh/id_ed25519.pub",
 		destination: "~/.ssh/authorized_keys"
@@ -33,7 +31,7 @@ Vagrant.configure(2) do |config|
 	config.vm.provision "shell",
 		path: "./utils/global_setup.sh"
 
-	config.hostmanager.aliases = %w(app1.localhost app2.localhost app3.localhost)
+	config.hostmanager.aliases = %w(app1.com app2.com app3.com)
 
 	config.vm.define SERVER_NAME do |control|
 		control.vm.hostname = SERVER_NAME
